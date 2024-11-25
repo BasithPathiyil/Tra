@@ -20,6 +20,10 @@
     "mongoose": "^8.1.0",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.3",
-    "xss-clean": "^0.1.4"
+    "xss-clean": "^0.1.4",
+    "axios": "^1.7.7",
+    "finnhub": "^1.2.19",
+    "stock-nse-india": "^1.2.0",
+    "yahoo-finance2": "^2.13.2"
   }
 }
