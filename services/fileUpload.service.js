@@ -407,8 +407,42 @@ const get50StockData = async () => {
     const sellMore3times = [];
     const buyMoreStocks = [];
     const buyMore3times = [];
+
+    //
+    let atoBuyNBuyMore = [];
+    let atoSellNSellMore = [];
+    let atoBuyNBuy3More = [];
+    let atoSellNSell3More = [];
     // Extract preOpenMarket data from each stock's data
     const preOpenMarketData = allStockData.map((stock) => {
+      if (
+        stock?.preOpenMarket?.totalSellQuantity >
+          stock?.preOpenMarket?.totalBuyQuantity &&
+        stock?.preOpenMarket?.atoSellQty > stock?.preOpenMarket?.atoBuyQty
+      ) {
+        atoSellNSellMore.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+        });
+      }
+
+      //atoBuyNBuyMore
+      if (
+        stock?.preOpenMarket?.totalBuyQuantity >
+          stock?.preOpenMarket?.totalSellQuantity &&
+        stock?.preOpenMarket?.atoBuyQty > stock?.preOpenMarket?.atoSellQty
+      ) {
+        atoBuyNBuyMore.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+        });
+      }
       if (
         stock?.preOpenMarket?.totalSellQuantity >
         stock?.preOpenMarket?.totalBuyQuantity
@@ -426,6 +460,22 @@ const get50StockData = async () => {
             stock: stock?.info?.symbol,
             buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          });
+        }
+
+        if (
+          stock?.preOpenMarket?.totalSellQuantity >
+            3 * stock?.preOpenMarket?.totalBuyQuantity &&
+          stock?.preOpenMarket?.atoSellQty > stock?.preOpenMarket?.atoBuyQty
+        ) {
+          atoSellNSell3More.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
           });
         }
       } else {
@@ -442,6 +492,21 @@ const get50StockData = async () => {
             stock: stock?.info?.symbol,
             buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          });
+        }
+        if (
+          stock?.preOpenMarket?.totalBuyQuantity >
+            3 * stock?.preOpenMarket?.totalSellQuantity &&
+          stock?.preOpenMarket?.atoBuyQty > stock?.preOpenMarket?.atoSellQty
+        ) {
+          atoBuyNBuy3More.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
           });
         }
       }
@@ -453,10 +518,14 @@ const get50StockData = async () => {
 
     return {
       // preOpenMarketData,
-      sellMoreStocks,
+      // sellMoreStocks,
       sellMore3times,
-      buyMoreStocks,
+      // buyMoreStocks,
       buyMore3times,
+      atoBuyNBuyMore,
+      atoBuyNBuy3More,
+      atoSellNSellMore,
+      atoSellNSell3More,
     }; // This will be an array of data for all the stocks
   } catch (error) {
     console.error("Error fetching stock data:", error);
