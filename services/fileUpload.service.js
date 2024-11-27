@@ -766,14 +766,14 @@ const get50StockData = async () => {
 
     return {
       // preOpenMarketData,
-      // sellMoreStocks,
-      // sellMore3times,
-      // buyMoreStocks,
-      // buyMore3times,
-      // atoBuyNBuyMore,
-      // atoBuyNBuy3More,
-      // atoSellNSellMore,
-      // atoSellNSell3More,
+      sellMoreStocks,
+      sellMore3times,
+      buyMoreStocks,
+      buyMore3times,
+      atoBuyNBuyMore,
+      atoBuyNBuy3More,
+      atoSellNSellMore,
+      atoSellNSell3More,
       buyMoreChangeNegative,
       buyMore3ChangeNegative,
       sellMoreChangePositive,
@@ -787,7 +787,7 @@ const get50StockData = async () => {
   }
 };
 
-const get10TimesStockDataFn = async (stocks) => {
+const get10TimesStockDataFn = async (stocks, times = 10) => {
   try {
     // Create an array of promises
     const stockDataPromises = stocks.map((symbol) => getDataBySymbol(symbol));
@@ -863,7 +863,7 @@ const get10TimesStockDataFn = async (stocks) => {
         }
         if (
           stock?.preOpenMarket?.totalSellQuantity >
-          10 * stock?.preOpenMarket?.totalBuyQuantity
+          times * stock?.preOpenMarket?.totalBuyQuantity
         ) {
           sellMore10times.push({
             stock: stock?.info?.symbol,
@@ -916,7 +916,7 @@ const get10TimesStockDataFn = async (stocks) => {
         }
         if (
           stock?.preOpenMarket?.totalBuyQuantity >
-          10 * stock?.preOpenMarket?.totalSellQuantity
+          times * stock?.preOpenMarket?.totalSellQuantity
         ) {
           buyMore10times.push({
             stock: stock?.info?.symbol,
@@ -1004,6 +1004,7 @@ const getStockGraphData = async () => {
 const getStock10timesData = async (query) => {
   try {
     let type = query?.type;
+    let times = Number(query?.times) || 10;
     let stock = [...nifty50Stocks];
     if (type) {
       if (type === "mid") {
@@ -1017,7 +1018,7 @@ const getStock10timesData = async (query) => {
     // const data = await nseIndia.getDataByEndpoint(
     //   "https://www.nseindia.com/api/market/volume"
     // );
-    const data = await get10TimesStockDataFn(stock);
+    const data = await get10TimesStockDataFn(stock, times);
     return data;
   } catch (error) {
     console.log("error", error);
