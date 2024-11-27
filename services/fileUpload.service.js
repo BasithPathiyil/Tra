@@ -393,6 +393,203 @@ let nifty50Stocks = [
   "EICHERMOT",
   "JSWSTEEL",
 ];
+const nifty100Symbols = [
+  "RELIANCE",
+  "TCS",
+  "INFY",
+  "HDFCBANK",
+  "ICICIBANK",
+  "HINDUNILVR",
+  "HDFC",
+  "SBIN",
+  "BHARTIARTL",
+  "KOTAKBANK",
+  "ITC",
+  "LT",
+  "ADANIENT",
+  "AXISBANK",
+  "ADANIGREEN",
+  "ASIANPAINT",
+  "BAJFINANCE",
+  "TITAN",
+  "MARUTI",
+  "WIPRO",
+  "ONGC",
+  "NTPC",
+  "HCLTECH",
+  "POWERGRID",
+  "TECHM",
+  "DMART",
+  "ULTRACEMCO",
+  "SUNPHARMA",
+  "TATAMOTORS",
+  "VEDL",
+  "JSWSTEEL",
+  "IOC",
+  "HINDALCO",
+  "ADANIPORTS",
+  "COALINDIA",
+  "DIVISLAB",
+  "BPCL",
+  "CIPLA",
+  "BAJAJFINSV",
+  "HEROMOTOCO",
+  "GRASIM",
+  "UPL",
+  "SHREECEM",
+  "TATAPOWER",
+  "BRITANNIA",
+  "DRREDDY",
+  "ADANITRANS",
+  "SBICARD",
+  "AMBUJACEM",
+  "PIDILITIND",
+  "M&M",
+  "BEL",
+  "DLF",
+  "ICICIPRULI",
+  "GAIL",
+  "BAJAJHLDNG",
+  "HDFCAMC",
+  "SRF",
+  "NAUKRI",
+  "PNB",
+  "SBILIFE",
+  "LTI",
+  "TATACHEM",
+  "PAGEIND",
+  "HAVELLS",
+  "EICHERMOT",
+  "ICICIGI",
+  "BERGEPAINT",
+  "MOTHERSON",
+  "ATGL",
+  "ADANIPOWER",
+  "IGL",
+  "BOSCHLTD",
+  "PIIND",
+  "AUROPHARMA",
+  "TORNTPHARM",
+  "GODREJCP",
+  "MFSL",
+  "CONCOR",
+  "COLPAL",
+  "TATACONSUM",
+  "BIOCON",
+  "NESTLEIND",
+  "ABB",
+  "HINDZINC",
+  "CHOLAFIN",
+  "INDUSINDBK",
+  "BANDHANBNK",
+  "LUPIN",
+  "TORNTPOWER",
+  "NMDC",
+  "ZOMATO",
+  "PFC",
+  "SIEMENS",
+  "PETRONET",
+  "CANBK",
+  "GLAND",
+  "TATACOMM",
+  "POLYCAB",
+  "INDHOTEL",
+  "HAL",
+  "IREDA",
+  "IRCTC",
+];
+
+const smallCapSymbols = [
+  "ADANIGREEN",
+  "ATGL",
+  "ADANIPORTS",
+  "ATGL",
+  "ASTRAL",
+  "APOLLOTYRE",
+  "ASTERDM",
+  "AUROPHARMA",
+  "BAJAJHLDNG",
+  "BALKRISIND",
+  "BANDHANBNK",
+  "CANFINHOME",
+  "CASTROLIND",
+  "CHOLAHLDNG",
+  "CUMMINSIND",
+  "EIDPARRY",
+  "FINCABLES",
+  "GLAND",
+  "GRINDWELL",
+  "HAL",
+  "IBREALEST",
+  "IDFCFIRSTB",
+  "INEOSSTYRO",
+  "IRCTC",
+  "ISEC",
+  "JBCHEPHARM",
+  "KEI",
+  "LALPATHLAB",
+  "LICHSGFIN",
+  "LTTS",
+  "MOTILALOFS",
+  "MRF",
+  "NH",
+  "NOCIL",
+  "ORIENTCEM",
+  "PHOENIXLTD",
+  "PRESTIGE",
+  "PNBHOUSING",
+  "RAJESHEXPO",
+  "ROUTE",
+  "RPOWER",
+  "SOLARINDS",
+  "SONATSOFTW",
+  "SUNTV",
+  "SYMPHONY",
+  "TEJASNET",
+  "TRENT",
+  "TVSMOTOR",
+  "WELSPUNIND",
+  "WHIRLPOOL",
+  "ZYDUSWELL",
+  "ZEN",
+  "CENTURYPLY",
+];
+
+const midCapSymbols = [
+  "ACC",
+  "ADANIGREEN",
+  "AMARAJABAT",
+  "APOLLOHOSP",
+  "AUROPHARMA",
+  "BALKRISIND",
+  "BATAINDIA",
+  "BHARATFORG",
+  "CROMPTON",
+  "DALMIASUG",
+  "ESCORTS",
+  "GODREJPROP",
+  "INDIGO",
+  "INDUSTOWER",
+  "JUBLFOOD",
+  "LICHSGFIN",
+  "LUPIN",
+  "M&MFIN",
+  "MANAPPURAM",
+  "MFSL",
+  "MRPL",
+  "OBEROIRLTY",
+  "PIIND",
+  "RBLBANK",
+  "RECLTD",
+  "SRTRANSFIN",
+  "SUNTV",
+  "TATACHEM",
+  "TATACOMM",
+  "TORNTPHARM",
+  "UPL",
+  "VGUARD",
+  "ZEEL",
+];
 
 const get50StockData = async () => {
   try {
@@ -413,6 +610,13 @@ const get50StockData = async () => {
     let atoSellNSellMore = [];
     let atoBuyNBuy3More = [];
     let atoSellNSell3More = [];
+
+    //
+    let sellMoreChangePositive = [];
+    let sellMore3ChangePositive = [];
+
+    let buyMoreChangeNegative = [];
+    let buyMore3ChangeNegative = [];
     // Extract preOpenMarket data from each stock's data
     const preOpenMarketData = allStockData.map((stock) => {
       if (
@@ -441,6 +645,7 @@ const get50StockData = async () => {
           sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
           atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
           atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          stockData: stock,
         });
       }
       if (
@@ -452,6 +657,16 @@ const get50StockData = async () => {
           buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
           sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
         });
+        if (stock.preOpenMarket?.Change > 0) {
+          sellMoreChangePositive.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            change: stock.preOpenMarket?.Change,
+          });
+        }
         if (
           stock?.preOpenMarket?.totalSellQuantity >
           3 * stock?.preOpenMarket?.totalBuyQuantity
@@ -463,6 +678,16 @@ const get50StockData = async () => {
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
           });
+          if (stock.preOpenMarket?.Change > 0) {
+            sellMore3ChangePositive.push({
+              stock: stock?.info?.symbol,
+              buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+              sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+              atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+              atoSellQty: stock?.preOpenMarket?.atoSellQty,
+              change: stock.preOpenMarket?.Change,
+            });
+          }
         }
 
         if (
@@ -476,6 +701,7 @@ const get50StockData = async () => {
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            stockData: stock,
           });
         }
       } else {
@@ -484,6 +710,16 @@ const get50StockData = async () => {
           buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
           sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
         });
+        if (stock.preOpenMarket?.Change < 0) {
+          buyMoreChangeNegative.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            change: stock.preOpenMarket?.Change,
+          });
+        }
         if (
           stock?.preOpenMarket?.totalBuyQuantity >
           3 * stock?.preOpenMarket?.totalSellQuantity
@@ -495,6 +731,17 @@ const get50StockData = async () => {
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
           });
+          if (stock.preOpenMarket?.Change < 0) {
+            buyMore3ChangeNegative.push({
+              stock: stock?.info?.symbol,
+              buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+              sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+              atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+              atoSellQty: stock?.preOpenMarket?.atoSellQty,
+              change: stock.preOpenMarket?.Change,
+              // stockData:stock
+            });
+          }
         }
         if (
           stock?.preOpenMarket?.totalBuyQuantity >
@@ -507,6 +754,7 @@ const get50StockData = async () => {
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            stockData: stock,
           });
         }
       }
@@ -519,13 +767,213 @@ const get50StockData = async () => {
     return {
       // preOpenMarketData,
       // sellMoreStocks,
-      sellMore3times,
+      // sellMore3times,
       // buyMoreStocks,
-      buyMore3times,
-      atoBuyNBuyMore,
-      atoBuyNBuy3More,
-      atoSellNSellMore,
-      atoSellNSell3More,
+      // buyMore3times,
+      // atoBuyNBuyMore,
+      // atoBuyNBuy3More,
+      // atoSellNSellMore,
+      // atoSellNSell3More,
+      buyMoreChangeNegative,
+      buyMore3ChangeNegative,
+      sellMoreChangePositive,
+      sellMore3ChangePositive,
+
+      // anyOne: allStockData[0],
+    }; // This will be an array of data for all the stocks
+  } catch (error) {
+    console.error("Error fetching stock data:", error);
+    throw error; // Re-throw the error if needed
+  }
+};
+
+const get10TimesStockDataFn = async (stocks) => {
+  try {
+    // Create an array of promises
+    const stockDataPromises = stocks.map((symbol) => getDataBySymbol(symbol));
+
+    // Wait for all promises to resolve
+    const allStockData = await Promise.all(stockDataPromises);
+    const sellMoreStocks = [];
+    const sellMore10times = [];
+    const buyMoreStocks = [];
+    const buyMore10times = [];
+
+    //
+    let atoBuyNBuyMore = [];
+    let atoSellNSellMore = [];
+    let atoBuyNBuy3More = [];
+    let atoSellNSell3More = [];
+
+    //
+    let sellMoreChangePositive = [];
+    let sellMore3ChangePositive = [];
+
+    let buyMoreChangeNegative = [];
+    let buyMore3ChangeNegative = [];
+    // Extract preOpenMarket data from each stock's data
+    const preOpenMarketData = allStockData.map((stock) => {
+      if (
+        stock?.preOpenMarket?.totalSellQuantity >
+          stock?.preOpenMarket?.totalBuyQuantity &&
+        stock?.preOpenMarket?.atoSellQty > stock?.preOpenMarket?.atoBuyQty
+      ) {
+        atoSellNSellMore.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+        });
+      }
+
+      //atoBuyNBuyMore
+      if (
+        stock?.preOpenMarket?.totalBuyQuantity >
+          stock?.preOpenMarket?.totalSellQuantity &&
+        stock?.preOpenMarket?.atoBuyQty > stock?.preOpenMarket?.atoSellQty
+      ) {
+        atoBuyNBuyMore.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          stockData: stock,
+        });
+      }
+      if (
+        stock?.preOpenMarket?.totalSellQuantity >
+        stock?.preOpenMarket?.totalBuyQuantity
+      ) {
+        sellMoreStocks.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+        });
+        if (stock.preOpenMarket?.Change > 0) {
+          sellMoreChangePositive.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            change: stock.preOpenMarket?.Change,
+          });
+        }
+        if (
+          stock?.preOpenMarket?.totalSellQuantity >
+          10 * stock?.preOpenMarket?.totalBuyQuantity
+        ) {
+          sellMore10times.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          });
+          if (stock.preOpenMarket?.Change > 0) {
+            sellMore3ChangePositive.push({
+              stock: stock?.info?.symbol,
+              buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+              sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+              atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+              atoSellQty: stock?.preOpenMarket?.atoSellQty,
+              change: stock.preOpenMarket?.Change,
+            });
+          }
+        }
+
+        if (
+          stock?.preOpenMarket?.totalSellQuantity >
+            3 * stock?.preOpenMarket?.totalBuyQuantity &&
+          stock?.preOpenMarket?.atoSellQty > stock?.preOpenMarket?.atoBuyQty
+        ) {
+          atoSellNSell3More.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            stockData: stock,
+          });
+        }
+      } else {
+        buyMoreStocks.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+        });
+        if (stock.preOpenMarket?.Change < 0) {
+          buyMoreChangeNegative.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            change: stock.preOpenMarket?.Change,
+          });
+        }
+        if (
+          stock?.preOpenMarket?.totalBuyQuantity >
+          10 * stock?.preOpenMarket?.totalSellQuantity
+        ) {
+          buyMore10times.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          });
+          if (stock.preOpenMarket?.Change < 0) {
+            buyMore3ChangeNegative.push({
+              stock: stock?.info?.symbol,
+              buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+              sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+              atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+              atoSellQty: stock?.preOpenMarket?.atoSellQty,
+              change: stock.preOpenMarket?.Change,
+              // stockData:stock
+            });
+          }
+        }
+        if (
+          stock?.preOpenMarket?.totalBuyQuantity >
+            3 * stock?.preOpenMarket?.totalSellQuantity &&
+          stock?.preOpenMarket?.atoBuyQty > stock?.preOpenMarket?.atoSellQty
+        ) {
+          atoBuyNBuy3More.push({
+            stock: stock?.info?.symbol,
+            buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+            sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+            atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+            atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            stockData: stock,
+          });
+        }
+      }
+      return {
+        symbol: stock?.info?.symbol || "", // Include the stock symbol for identification
+        preOpenMarket: stock?.preOpenMarket, // Extract preOpenMarket data
+      };
+    });
+
+    return {
+      // preOpenMarketData,
+      // sellMoreStocks,
+      sellMore10times,
+      // buyMoreStocks,
+      buyMore10times,
+      // atoBuyNBuyMore,
+      // atoBuyNBuy3More,
+      // atoSellNSellMore,
+      // atoSellNSell3More,
+      // buyMoreChangeNegative,
+      // buyMore3ChangeNegative,
+      // sellMoreChangePositive,
+      // sellMore3ChangePositive,
+
+      // anyOne: allStockData[0],
     }; // This will be an array of data for all the stocks
   } catch (error) {
     console.error("Error fetching stock data:", error);
@@ -553,10 +1001,46 @@ const getStockGraphData = async () => {
   // const data = await get50StockData();
 };
 
+const getStock10timesData = async (query) => {
+  try {
+    let type = query?.type;
+    let stock = [...nifty50Stocks];
+    if (type) {
+      if (type === "mid") {
+        stock = [...midCapSymbols];
+      } else if (type === "small") {
+        stock = [...smallCapSymbols];
+      } else if (type === "hundred") {
+        stock = [...nifty100Symbols];
+      }
+    }
+    // const data = await nseIndia.getDataByEndpoint(
+    //   "https://www.nseindia.com/api/market/volume"
+    // );
+    const data = await get10TimesStockDataFn(stock);
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+  // const data = await get50StockData();
+};
+
+const getEquityStockIndices = async () => {
+  try {
+    const data = await nseIndia.getEquityStockIndices("TATASTEEL");
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   fileUpload,
   removeFileDoc,
   getAllFilesByUserId,
   getFile,
   getStockGraphData,
+  getStock10timesData,
+  getEquityStockIndices,
 };

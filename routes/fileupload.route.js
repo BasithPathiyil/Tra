@@ -13,4 +13,6 @@ router.get(
 );
 router.get("/get_file", auth, fileUploadController.getFile);
 router.get("/stockdata", fileUploadController.getStockGraphData);
+router.get("/stockdata10", fileUploadController.getStock10timesData);
+router.get("/stockdata1", fileUploadController.getEquityStockIndices);
 module.exports = router;

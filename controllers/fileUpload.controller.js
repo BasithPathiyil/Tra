@@ -64,10 +64,34 @@ const getStockGraphData = tryCatch(async (req, res, next) => {
   });
 });
 
+const getStock10timesData = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.getStock10timesData(req.query);
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
+
+const getEquityStockIndices = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.getEquityStockIndices();
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
+
 module.exports = {
   fileUpload,
   removeFile,
   getAllFilesByUserId,
   getFile,
   getStockGraphData,
+  getStock10timesData,
+  getEquityStockIndices,
 };
