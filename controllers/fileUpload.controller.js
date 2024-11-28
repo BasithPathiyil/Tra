@@ -77,7 +77,7 @@ const getStock10timesData = tryCatch(async (req, res, next) => {
 
 const getEquityStockIndices = tryCatch(async (req, res, next) => {
   let { page, rowsPerPage } = req.query;
-  let result = await fileUploadService.getEquityStockIndices();
+  let result = await fileUploadService.getEquityStockIndices(req.query);
   res.status(200).json({
     status: true,
     statuscode: 200,

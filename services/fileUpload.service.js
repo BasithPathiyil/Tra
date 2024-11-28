@@ -824,6 +824,7 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
           sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
           atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
           atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock.preOpenMarket?.Change,
         });
       }
 
@@ -839,7 +840,7 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
           sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
           atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
           atoSellQty: stock?.preOpenMarket?.atoSellQty,
-          stockData: stock,
+          change: stock.preOpenMarket?.Change,
         });
       }
       if (
@@ -850,6 +851,9 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
           stock: stock?.info?.symbol,
           buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
           sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock.preOpenMarket?.Change,
         });
         if (stock.preOpenMarket?.Change > 0) {
           sellMoreChangePositive.push({
@@ -871,6 +875,7 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            change: stock.preOpenMarket?.Change,
           });
           if (stock.preOpenMarket?.Change > 0) {
             sellMore3ChangePositive.push({
@@ -895,7 +900,7 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
-            stockData: stock,
+            change: stock.preOpenMarket?.Change,
           });
         }
       } else {
@@ -903,6 +908,9 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
           stock: stock?.info?.symbol,
           buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
           sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock.preOpenMarket?.Change,
         });
         if (stock.preOpenMarket?.Change < 0) {
           buyMoreChangeNegative.push({
@@ -924,6 +932,7 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
+            change: stock.preOpenMarket?.Change,
           });
           if (stock.preOpenMarket?.Change < 0) {
             buyMore3ChangeNegative.push({
@@ -948,7 +957,7 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
             sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
             atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
             atoSellQty: stock?.preOpenMarket?.atoSellQty,
-            stockData: stock,
+            change: stock.preOpenMarket?.Change,
           });
         }
       }
@@ -960,24 +969,106 @@ const get10TimesStockDataFn = async (stocks, times = 10) => {
 
     return {
       // preOpenMarketData,
-      // sellMoreStocks,
+      sellMoreStocks,
       sellMore10times,
-      // buyMoreStocks,
+      buyMoreStocks,
       buyMore10times,
-      // atoBuyNBuyMore,
-      // atoBuyNBuy3More,
-      // atoSellNSellMore,
-      // atoSellNSell3More,
-      // buyMoreChangeNegative,
-      // buyMore3ChangeNegative,
-      // sellMoreChangePositive,
-      // sellMore3ChangePositive,
+      atoBuyNBuyMore,
+      atoBuyNBuy3More,
+      atoSellNSellMore,
+      atoSellNSell3More,
+      buyMoreChangeNegative,
+      buyMore3ChangeNegative,
+      sellMoreChangePositive,
+      sellMore3ChangePositive,
 
       // anyOne: allStockData[0],
     }; // This will be an array of data for all the stocks
   } catch (error) {
     console.error("Error fetching stock data:", error);
     throw error; // Re-throw the error if needed
+  }
+};
+
+const getCustomTimesStockDataFn = async (stocks, times = 3) => {
+  try {
+    const stockDataPromises = stocks.map((symbol) => getDataBySymbol(symbol));
+    const allStockData = await Promise.all(stockDataPromises);
+    const sellMoreFiltered = [];
+    const buyMoreFiltered = [];
+    const sellMoreAtoFilter = [];
+    const buyMoreAtoFiltered = [];
+
+    allStockData.forEach((stock) => {
+      if (
+        stock?.preOpenMarket?.totalSellQuantity >
+          times * stock?.preOpenMarket?.totalBuyQuantity &&
+        stock?.preOpenMarket?.Change > 0
+      ) {
+        sellMoreFiltered.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock?.preOpenMarket?.Change,
+        });
+      }
+      if (
+        stock?.preOpenMarket?.totalSellQuantity >
+          times * stock?.preOpenMarket?.totalBuyQuantity &&
+        stock?.preOpenMarket?.atoSellQty > stock?.preOpenMarket?.atoBuyQty &&
+        stock?.preOpenMarket?.Change > 0
+      ) {
+        sellMoreAtoFilter.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock?.preOpenMarket?.Change,
+        });
+      }
+      if (
+        stock?.preOpenMarket?.totalBuyQuantity >
+          times * stock?.preOpenMarket?.totalSellQuantity &&
+        stock?.preOpenMarket?.Change < 0
+      ) {
+        buyMoreFiltered.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock?.preOpenMarket?.Change,
+        });
+      }
+      if (
+        stock?.preOpenMarket?.totalBuyQuantity >
+          times * stock?.preOpenMarket?.totalSellQuantity &&
+        stock?.preOpenMarket?.atoBuyQty > stock?.preOpenMarket?.atoSellQty &&
+        stock?.preOpenMarket?.Change < 0
+      ) {
+        buyMoreAtoFiltered.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock?.preOpenMarket?.Change,
+        });
+      }
+    });
+
+    return {
+      sellMoreFiltered,
+      sellMoreAtoFilter,
+      buyMoreFiltered,
+      buyMoreAtoFiltered,
+    };
+  } catch (error) {
+    console.error("Error fetching sell more data:", error);
+    throw error;
   }
 };
 
@@ -1027,15 +1118,39 @@ const getStock10timesData = async (query) => {
   // const data = await get50StockData();
 };
 
-const getEquityStockIndices = async () => {
+const getEquityStockIndices = async (query) => {
   try {
-    const data = await nseIndia.getEquityStockIndices("TATASTEEL");
+    const data = await getStockCustomize(query);
     return data;
   } catch (error) {
     throw error;
   }
 };
-
+const getStockCustomize = async (query) => {
+  try {
+    let type = query?.type;
+    let times = Number(query?.times) || 10;
+    let stock = [...nifty50Stocks];
+    if (type) {
+      if (type === "mid") {
+        stock = [...midCapSymbols];
+      } else if (type === "small") {
+        stock = [...smallCapSymbols];
+      } else if (type === "hundred") {
+        stock = [...nifty100Symbols];
+      }
+    }
+    // const data = await nseIndia.getDataByEndpoint(
+    //   "https://www.nseindia.com/api/market/volume"
+    // );
+    const data = await getCustomTimesStockDataFn(stock, times);
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+  // const data = await get50StockData();
+};
 module.exports = {
   fileUpload,
   removeFileDoc,
