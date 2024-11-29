@@ -499,6 +499,307 @@ const nifty100Symbols = [
   "IRCTC",
 ];
 
+const indianStockSymbols = [
+  "RELIANCE",
+  "TCS",
+  "HDFCBANK",
+  "INFY",
+  "ICICIBANK",
+  "HINDUNILVR",
+  "SBI",
+  "HDFC",
+  "ITC",
+  "BHARTIARTL",
+  "KOTAKBANK",
+  "ADANIENT",
+  "WIPRO",
+  "LT",
+  "ASIANPAINT",
+  "DMART",
+  "BAJFINANCE",
+  "TITAN",
+  "ONGC",
+  "ADANIPORTS",
+  "MARUTI",
+  "ULTRACEMCO",
+  "HCLTECH",
+  "NTPC",
+  "POWERGRID",
+  "NESTLEIND",
+  "SUNPHARMA",
+  "COALINDIA",
+  "TECHM",
+  "AXISBANK",
+  "JSWSTEEL",
+  "BPCL",
+  "INDUSINDBK",
+  "TATACONSUM",
+  "DIVISLAB",
+  "ADANIGREEN",
+  "TATASTEEL",
+  "UPL",
+  "M&M",
+  "GRASIM",
+  "DABUR",
+  "SBILIFE",
+  "HDFCLIFE",
+  "BAJAJFINSV",
+  "EICHERMOT",
+  "ADANITRANS",
+  "HINDALCO",
+  "ICICIPRULI",
+  "BRITANNIA",
+  "PIDILITIND",
+  "HEROMOTOCO",
+  "GAIL",
+  "IOC",
+  "VEDL",
+  "BIOCON",
+  "SIEMENS",
+  "DRREDDY",
+  "AMBUJACEM",
+  "ZOMATO",
+  "PAYTM",
+  "NYKAA",
+  "POLYCAB",
+  "BOSCHLTD",
+  "SHREECEM",
+  "BANDHANBNK",
+  "IRCTC",
+  "ACC",
+  "GODREJCP",
+  "BERGEPAINT",
+  "TORNTPHARM",
+  "COLPAL",
+  "CIPLA",
+  "TATAMOTORS",
+  "HAL",
+  "TATAPOWER",
+  "ADANIPOWER",
+  "INDIGO",
+  "MRF",
+  "PNB",
+  "UBL",
+  "IDFCFIRSTB",
+  "MOTHERSON",
+  "LICI",
+  "ABB",
+  "BEL",
+  "BHEL",
+  "NHPC",
+  "IRFC",
+  "SAIL",
+  "INDHOTEL",
+  "SRF",
+  "TATACHEM",
+  "CASTROLIND",
+  "JINDALSTEL",
+  "ASHOKLEY",
+  "BANKBARODA",
+  "LTI",
+  "LTIM",
+  "MPHASIS",
+  "PERSISTENT",
+  "COFORGE",
+  "NIITTECH",
+  "INDIAMART",
+  "MCX",
+  "BSE",
+  "HAPPSTMNDS",
+  "ZENSARTECH",
+  "OFSS",
+  "CYIENT",
+  "MINDTREE",
+  "TECHMAHINDRA",
+  "KPITTECH",
+  "ADANIWILMAR",
+  "JUBLFOOD",
+  "TRENT",
+  "APOLLOHOSP",
+  "FORTIS",
+  "AUROPHARMA",
+  "LUPIN",
+  "GLENMARK",
+  "ALKEM",
+  "ABBOTINDIA",
+  "IPCALAB",
+  "SANOFI",
+  "ZYDUSLIFE",
+  "METROPOLIS",
+  "ASTRAL",
+  "VGUARD",
+  "KEI",
+  "HAVELLS",
+  "FINOLEXIND",
+  "CROMPTON",
+  "BEML",
+  "CONCOR",
+  "AIAENG",
+  "HINDCOPPER",
+  "NMDC",
+  "MOIL",
+  "ORIENTCEM",
+  "RAMCOCEM",
+  "JKLAKSHMI",
+  "SOBHA",
+  "DLF",
+  "GODREJPROP",
+  "OBEROIRLTY",
+  "BRIGADE",
+  "PRESTIGE",
+  "SUNTECK",
+  "PHOENIXLTD",
+  "GMRINFRA",
+  "L&TFH",
+  "IDFC",
+  "IDBI",
+  "CHOLAFIN",
+  "BAJAJHLDNG",
+  "SHRIRAMFIN",
+  "PFC",
+  "RECLTD",
+  "IRCON",
+  "RVNL",
+  "ADANITOTALGAS",
+  "MGL",
+  "IGL",
+  "GSPL",
+  "PETRONET",
+  "OIL",
+  "CANBK",
+  "UNIONBANK",
+  "CENTRALBK",
+  "INDIANB",
+  "IOB",
+  "UCOBANK",
+  "FEDERALBNK",
+  "CUB",
+  "YESBANK",
+  "RBLBANK",
+  "DCBBANK",
+  "SBICARD",
+  "APOLLOTYRE",
+  "CEATLTD",
+  "JKTYRE",
+  "BALKRISIND",
+  "AMARAJABAT",
+  "EXIDEIND",
+  "LICHSGFIN",
+  "HDFC",
+  "GODREJAGRO",
+  "RALLIS",
+  "PIIND",
+  "CHAMBLFERT",
+  "COROMANDEL",
+  "GNFC",
+  "GSFC",
+  "DEEPAKFERT",
+  "NAVINFLUOR",
+  "AARTIIND",
+  "ALKYLAMINE",
+  "FINEORG",
+  "NEOGEN",
+  "VSTIND",
+  "NOCIL",
+  "ATUL",
+  "KANSAINER",
+  "AKZOINDIA",
+  "SHALPAINTS",
+  "GUJALKALI",
+  "HONAUT",
+  "TTKPRESTIG",
+  "IFBIND",
+  "SCHAEFFLER",
+  "CUMMINSIND",
+  "THERMAX",
+  "SONACOMS",
+  "ROUTE",
+  "JINDALSTEL",
+  "TTML",
+  "JBCHEPHARM",
+  "BBTC",
+  "JUBLPHARMA",
+  "SYMPHONY",
+  "LUXIND",
+  "RUPA",
+  "PAGEIND",
+  "AMBUJACEM",
+  "SHREECEM",
+  "ACC",
+  "EIDPARRY",
+  "VINATIORGA",
+  "KIRLOSBROS",
+  "SOLARINDS",
+  "INDIAMART",
+  "CENTURYTEX",
+  "JKTYRE",
+  "RAJESHEXPO",
+  "KPRMILL",
+  "POLYCAB",
+  "MASFIN",
+  "MAXHEALTH",
+  "WESTLIFE",
+  "KIMS",
+  "APLLTD",
+  "GPPL",
+  "INOXWIND",
+  "ABBINDIA",
+  "KALPATPOWR",
+  "VRLLOG",
+  "MASTEK",
+  "SIS",
+  "STLTECH",
+  "VAIBHAVGBL",
+  "LAXMIMACH",
+  "IEX",
+  "NAUKRI",
+  "GNFC",
+  "JSWHL",
+  "KPIT",
+  "FSL",
+  "FDC",
+  "LAOPALA",
+  "CENTUM",
+  "AVANTIFEED",
+  "HGINFRA",
+  "KAJARIACER",
+  "RELAXO",
+  "RADICO",
+  "TASTYBITE",
+  "BAJAJCON",
+  "VINATIORGA",
+  "HAPPSTMNDS",
+  "LATENTVIEW",
+  "SUVENPHAR",
+  "CHEMPLASTS",
+  "NLCINDIA",
+  "SPANDANA",
+  "INDOSTAR",
+  "SHYAMMETL",
+  "CLEAN",
+  "EXPLEOSOL",
+  "ANANTRAJ",
+  "SUVENPHARMA",
+  "AMRUTANJAN",
+  "MAHLOG",
+  "BLS",
+  "DIXON",
+  "CAMLINFINE",
+  "ESABINDIA",
+  "GSFC",
+  "MTARTECH",
+  "STARCEMENT",
+  "PTC",
+  "AKASH",
+  "GICRE",
+  "IPO",
+  "SURYAROSH",
+  "ONGC",
+  "RELAXO",
+  "JYOTHYLAB",
+  "ASTRAZEN",
+];
+
 const smallCapSymbols = [
   "ADANIGREEN",
   "ATGL",
@@ -1071,6 +1372,51 @@ const getCustomTimesStockDataFn = async (stocks, times = 3) => {
     throw error;
   }
 };
+const getCustomTimesStockDataFnForAto = async (stocks, times = 3) => {
+  try {
+    const stockDataPromises = stocks.map((symbol) => getDataBySymbol(symbol));
+    const allStockData = await Promise.all(stockDataPromises);
+    const sellAtoMore = [];
+    const buyAtoMore = [];
+
+    allStockData.forEach((stock) => {
+      if (
+        stock?.preOpenMarket?.atoSellQty >
+        times * stock?.preOpenMarket?.atoBuyQty
+      ) {
+        sellAtoMore.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock?.preOpenMarket?.Change,
+        });
+      }
+      if (
+        stock?.preOpenMarket?.atoBuyQty >
+        times * stock?.preOpenMarket?.atoSellQty
+      ) {
+        buyAtoMore.push({
+          stock: stock?.info?.symbol,
+          buyQuantity: stock?.preOpenMarket?.totalBuyQuantity,
+          sellQuantity: stock?.preOpenMarket?.totalSellQuantity,
+          atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
+          atoSellQty: stock?.preOpenMarket?.atoSellQty,
+          change: stock?.preOpenMarket?.Change,
+        });
+      }
+    });
+
+    return {
+      sellAtoMore,
+      buyAtoMore,
+    };
+  } catch (error) {
+    console.error("Error fetching sell more data:", error);
+    throw error;
+  }
+};
 
 const getDataBySymbol = async (symbol) => {
   let url = `https://www.nseindia.com/api/quote-equity?symbol=${symbol}`;
@@ -1138,12 +1484,41 @@ const getStockCustomize = async (query) => {
         stock = [...smallCapSymbols];
       } else if (type === "hundred") {
         stock = [...nifty100Symbols];
+      } else if (type === "three") {
+        stock = [...indianStockSymbols];
       }
     }
     // const data = await nseIndia.getDataByEndpoint(
     //   "https://www.nseindia.com/api/market/volume"
     // );
     const data = await getCustomTimesStockDataFn(stock, times);
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+  // const data = await get50StockData();
+};
+const getStockCustomizeForAto = async (query) => {
+  try {
+    let type = query?.type;
+    let times = Number(query?.times) || 10;
+    let stock = [...nifty50Stocks];
+    if (type) {
+      if (type === "mid") {
+        stock = [...midCapSymbols];
+      } else if (type === "small") {
+        stock = [...smallCapSymbols];
+      } else if (type === "hundred") {
+        stock = [...nifty100Symbols];
+      } else if (type === "three") {
+        stock = [...indianStockSymbols];
+      }
+    }
+    // const data = await nseIndia.getDataByEndpoint(
+    //   "https://www.nseindia.com/api/market/volume"
+    // );
+    const data = await getCustomTimesStockDataFnForAto(stock, times);
     return data;
   } catch (error) {
     console.log("error", error);
@@ -1159,4 +1534,5 @@ module.exports = {
   getStockGraphData,
   getStock10timesData,
   getEquityStockIndices,
+  getStockCustomizeForAto,
 };

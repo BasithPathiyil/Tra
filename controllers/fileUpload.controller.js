@@ -86,6 +86,17 @@ const getEquityStockIndices = tryCatch(async (req, res, next) => {
   });
 });
 
+const getStockCustomizeForAto = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.getStockCustomizeForAto(req.query);
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
+
 module.exports = {
   fileUpload,
   removeFile,
@@ -94,4 +105,5 @@ module.exports = {
   getStockGraphData,
   getStock10timesData,
   getEquityStockIndices,
+  getStockCustomizeForAto,
 };
