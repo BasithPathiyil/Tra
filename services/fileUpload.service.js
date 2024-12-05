@@ -268,8 +268,8 @@ const aggregateToIntervals = (data, intervalMinutes) => {
 const { NseIndia } = require("stock-nse-india");
 const nseIndia = new NseIndia();
 
-const aggregateTo15Minutes = (data) => {
-  const fifteenMinutes = 15 * 60 * 1000; // 15 minutes in milliseconds
+const aggregateToNMinutes = (data, n = 5) => {
+  const fifteenMinutes = n * 60 * 1000; // 15 minutes in milliseconds
   const aggregatedData = [];
   let currentIntervalStart =
     Math.floor(data[0][0] / fifteenMinutes) * fifteenMinutes;
@@ -1526,6 +1526,149 @@ const getStockCustomizeForAto = async (query) => {
   }
   // const data = await get50StockData();
 };
+
+const getStockIntradayValues = async (stockSymbol = "TATASTEEL") => {
+  const data = await nseIndia.getEquityIntradayData(stockSymbol);
+  return data;
+};
+
+const get5MinuteIntervals = (data) => {
+  const grouped = {};
+  data.forEach(([timestamp, price]) => {
+    const date = new Date(timestamp);
+    const interval = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      Math.floor(date.getMinutes() / 5) * 5
+    );
+    const key = interval.getTime();
+
+    if (!grouped[key]) {
+      grouped[key] = {
+        time: interval,
+        opening: price,
+        closing: price,
+        high: price,
+        low: price,
+      };
+    } else {
+      grouped[key].closing = price;
+      grouped[key].high = Math.max(grouped[key].high, price);
+      grouped[key].low = Math.min(grouped[key].low, price);
+    }
+  });
+
+  return Object.values(grouped).sort((a, b) => a.time - b.time);
+};
+
+const getLast3Intervals = async (query) => {
+  console.log("working");
+
+  if (!query.time) {
+    query.time = "2024-12-04T09:48:00Z"; // Default time if none is provided
+  }
+
+  try {
+    const currentTime = new Date(query.time).getTime(); // Parse the query time
+    console.log("currentTime", currentTime);
+    let stockSymbol = "TATASTEEL";
+    const stockData = await getStockIntradayValues(stockSymbol); // Fetch stock data
+    const intervals = get5MinuteIntervals(stockData.grapthData);
+
+    const relevantIntervals = intervals.filter(
+      (interval) => interval?.time < currentTime
+    );
+
+    if (relevantIntervals.length < 3) {
+      return { message: "Not enough data to calculate." };
+    }
+    let [first, second, third] = [
+      relevantIntervals[relevantIntervals?.length - 4],
+      relevantIntervals[relevantIntervals?.length - 3],
+      relevantIntervals[relevantIntervals?.length - 2],
+    ];
+
+    // Apply the condition
+    // const [first, second, third] = relevantIntervals;
+    const condition =
+      first.opening < first.closing &&
+      second.opening < second.closing &&
+      third.opening < third.closing &&
+      second.opening < third.opening;
+
+    // Format the response
+    const response = {
+      intervals: [first, second, third],
+      condition,
+    };
+    return response;
+  } catch (error) {
+    console.log(error);
+    return { error: "An error occurred while processing the data." };
+  }
+};
+
+const getLast3IntervalsOfMultiple = async (query) => {
+  console.log("working");
+
+  if (!query.time) {
+    query.time = "2024-12-04T09:48:00Z"; // Default time if none is provided
+  }
+
+  try {
+    const currentTime = new Date(query.time).getTime(); // Parse the query time
+
+    const stockSymbols = [...nifty50Stocks]; // Array of stock symbols
+    const validStocks = []; // Array to store valid stock symbols that meet the condition
+
+    // Fetch stock data for all symbols using Promise.all
+    const stockPromises = stockSymbols.map(async (stockSymbol) => {
+      try {
+        const stockData = await getStockIntradayValues(stockSymbol); // Fetch stock data
+        const intervals = get5MinuteIntervals(stockData.grapthData);
+
+        const relevantIntervals = intervals.filter(
+          (interval) => interval?.time < currentTime
+        );
+
+        if (relevantIntervals.length < 3) {
+          return null; // Not enough data to calculate
+        }
+
+        const [first, second, third] = [
+          relevantIntervals[relevantIntervals?.length - 4],
+          relevantIntervals[relevantIntervals?.length - 3],
+          relevantIntervals[relevantIntervals?.length - 2],
+        ];
+
+        // Apply the condition
+        const condition =
+          first.opening < first.closing &&
+          second.opening < second.closing &&
+          third.opening < third.closing &&
+          second.opening < third.opening;
+
+        if (condition) {
+          validStocks.push(stockSymbol); // Add stock symbol if condition is met
+        }
+      } catch (error) {
+        console.log(`Error fetching data for ${stockSymbol}:`, error);
+      }
+    });
+
+    // Wait for all stock data fetches to complete
+    await Promise.all(stockPromises);
+
+    // Return the valid stocks
+    return { validStocks };
+  } catch (error) {
+    console.log(error);
+    return { error: "An error occurred while processing the data." };
+  }
+};
+
 module.exports = {
   fileUpload,
   removeFileDoc,
@@ -1535,4 +1678,7 @@ module.exports = {
   getStock10timesData,
   getEquityStockIndices,
   getStockCustomizeForAto,
+  getStockIntradayValues,
+  getLast3Intervals,
+  getLast3IntervalsOfMultiple,
 };

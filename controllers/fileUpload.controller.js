@@ -97,6 +97,38 @@ const getStockCustomizeForAto = tryCatch(async (req, res, next) => {
   });
 });
 
+const getStockIntradayValues = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.getStockIntradayValues(req.query);
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
+
+const getLast3Intervals = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.getLast3Intervals(req.query);
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
+const getLast3IntervalsOfMultiple = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.getLast3IntervalsOfMultiple(req.query);
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
+
 module.exports = {
   fileUpload,
   removeFile,
@@ -106,4 +138,7 @@ module.exports = {
   getStock10timesData,
   getEquityStockIndices,
   getStockCustomizeForAto,
+  getStockIntradayValues,
+  getLast3Intervals,
+  getLast3IntervalsOfMultiple,
 };
