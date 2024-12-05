@@ -1621,7 +1621,8 @@ const getLast3IntervalsOfMultiple = async (query) => {
     const currentTime = new Date(query.time).getTime(); // Parse the query time
 
     const stockSymbols = [...nifty50Stocks]; // Array of stock symbols
-    const validStocks = []; // Array to store valid stock symbols that meet the condition
+    const validStocks = [];
+    const validBearishStocks = [];
 
     // Fetch stock data for all symbols using Promise.all
     const stockPromises = stockSymbols.map(async (stockSymbol) => {
@@ -1650,8 +1651,17 @@ const getLast3IntervalsOfMultiple = async (query) => {
           third.opening < third.closing &&
           second.opening < third.opening;
 
+        const bearishCondition =
+          first.opening > first.closing &&
+          second.opening > second.closing &&
+          third.opening > third.closing &&
+          second.opening > third.opening;
+
         if (condition) {
           validStocks.push(stockSymbol); // Add stock symbol if condition is met
+        }
+        if (bearishCondition) {
+          validBearishStocks.push(stockSymbol); // Add stock symbol if condition is met
         }
       } catch (error) {
         console.log(`Error fetching data for ${stockSymbol}:`, error);
@@ -1662,7 +1672,7 @@ const getLast3IntervalsOfMultiple = async (query) => {
     await Promise.all(stockPromises);
 
     // Return the valid stocks
-    return { validStocks };
+    return { validStocks, validBearishStocks };
   } catch (error) {
     console.log(error);
     return { error: "An error occurred while processing the data." };
