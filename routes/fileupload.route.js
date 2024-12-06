@@ -22,4 +22,6 @@ router.get(
   "/stockdata_intraday_last3multiple",
   fileUploadController.getLast3IntervalsOfMultiple
 );
+
+router.get("/preopenMarket", fileUploadController.preOpenMarketData);
 module.exports = router;

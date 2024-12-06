@@ -1313,6 +1313,7 @@ const getCustomTimesStockDataFn = async (stocks, times = 3) => {
           atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
           atoSellQty: stock?.preOpenMarket?.atoSellQty,
           change: stock?.preOpenMarket?.Change,
+          perChange: stock?.preOpenMarket?.perChange,
         });
       }
       if (
@@ -1328,6 +1329,7 @@ const getCustomTimesStockDataFn = async (stocks, times = 3) => {
           atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
           atoSellQty: stock?.preOpenMarket?.atoSellQty,
           change: stock?.preOpenMarket?.Change,
+          perChange: stock?.preOpenMarket?.perChange,
         });
       }
       if (
@@ -1342,6 +1344,7 @@ const getCustomTimesStockDataFn = async (stocks, times = 3) => {
           atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
           atoSellQty: stock?.preOpenMarket?.atoSellQty,
           change: stock?.preOpenMarket?.Change,
+          perChange: stock?.preOpenMarket?.perChange,
         });
       }
       if (
@@ -1357,6 +1360,7 @@ const getCustomTimesStockDataFn = async (stocks, times = 3) => {
           atoBuyQty: stock?.preOpenMarket?.atoBuyQty,
           atoSellQty: stock?.preOpenMarket?.atoSellQty,
           change: stock?.preOpenMarket?.Change,
+          perChange: stock?.preOpenMarket?.perChange,
         });
       }
     });
@@ -1532,7 +1536,7 @@ const getStockIntradayValues = async (stockSymbol = "TATASTEEL") => {
   return data;
 };
 
-const get5MinuteIntervals = (data) => {
+const get5MinuteIntervals = (data, n = 5) => {
   const grouped = {};
   data.forEach(([timestamp, price]) => {
     const date = new Date(timestamp);
@@ -1541,7 +1545,7 @@ const get5MinuteIntervals = (data) => {
       date.getMonth(),
       date.getDate(),
       date.getHours(),
-      Math.floor(date.getMinutes() / 5) * 5
+      Math.floor(date.getMinutes() / n) * n
     );
     const key = interval.getTime();
 
@@ -1612,7 +1616,9 @@ const getLast3Intervals = async (query) => {
 
 const getLast3IntervalsOfMultiple = async (query) => {
   console.log("working");
-
+  if (!query?.mg) {
+    query.mg = 5;
+  }
   if (!query.time) {
     query.time = "2024-12-04T09:48:00Z"; // Default time if none is provided
   }
@@ -1628,7 +1634,7 @@ const getLast3IntervalsOfMultiple = async (query) => {
     const stockPromises = stockSymbols.map(async (stockSymbol) => {
       try {
         const stockData = await getStockIntradayValues(stockSymbol); // Fetch stock data
-        const intervals = get5MinuteIntervals(stockData.grapthData);
+        const intervals = get5MinuteIntervals(stockData.grapthData, query?.mg);
 
         const relevantIntervals = intervals.filter(
           (interval) => interval?.time < currentTime
@@ -1670,12 +1676,496 @@ const getLast3IntervalsOfMultiple = async (query) => {
 
     // Wait for all stock data fetches to complete
     await Promise.all(stockPromises);
+    // const range = {
+    //   start: new Date("2024-12-01"),
+    //   end: new Date("2021-12-06"),
+    // };
+    // const historicalData = await nseIndia.getEquityTradeInfo("TATASTEEL");
+    // const activeEquities = await nseIndia.getMostActiveEquities();
 
     // Return the valid stocks
     return { validStocks, validBearishStocks };
   } catch (error) {
     console.log(error);
     return { error: "An error occurred while processing the data." };
+  }
+};
+
+let allSymbols = [
+  "RELIANCE",
+  "TCS",
+  "HDFCBANK",
+  "BHARTIARTL",
+  "ICICIBANK",
+  "INFY",
+  "SBIN",
+  "LICI",
+  "ITC",
+  "HINDUNILVR",
+  "LT",
+  "HCLTECH",
+  "SUNPHARMA",
+  "BAJFINANCE",
+  "AXISBANK",
+  "NTPC",
+  "KOTAKBANK",
+  "MARUTI",
+  "M&M",
+  "ULTRACEMCO",
+  "ONGC",
+  "WIPRO",
+  "TITAN",
+  "POWERGRID",
+  "HAL",
+  "TATAMOTORS",
+  "ADANIENT",
+  "SIEMENS",
+  "ADANIPORTS",
+  "ZOMATO",
+  "BAJAJFINSV",
+  "COALINDIA",
+  "TRENT",
+  "DMART",
+  "JSWSTEEL",
+  "ASIANPAINT",
+  "BEL",
+  "NESTLEIND",
+  "VBL",
+  "HINDZINC",
+  "JIOFIN",
+  "DLF",
+  "ADANIPOWER",
+  "IRFC",
+  "VEDL",
+  "IOC",
+  "ADANIGREEN",
+  "LTIM",
+  "TATASTEEL",
+  "GRASIM",
+  "PFC",
+  "INDIGO",
+  "DIVISLAB",
+  "PIDILITIND",
+  "ABB",
+  "TECHM",
+  "HINDALCO",
+  "RECLTD",
+  "SBILIFE",
+  "TATAPOWER",
+  "AMBUJACEM",
+  "HDFCLIFE",
+  "GAIL",
+  "BANKBARODA",
+  "LODHA",
+  "EICHERMOT",
+  "BPCL",
+  "PNB",
+  "GODREJCP",
+  "BAJAJHFL",
+  "MOTHERSON",
+  "TVSMOTOR",
+  "CGPOWER",
+  "CIPLA",
+  "BAJAJHLDNG",
+  "JSWENERGY",
+  "SHRIRAMFIN",
+  "BRITANNIA",
+  "INDHOTEL",
+  "TORNTPHARM",
+  "POLYCAB",
+  "NAUKRI",
+  "IOB",
+  "OFSS",
+  "HAVELLS",
+  "UNITDSPR",
+  "CHOLAFIN",
+  "BOSCHLTD",
+  "MAXHEALTH",
+  "DIXON",
+  "APOLLOHOSP",
+  "MANKIND",
+  "DRREDDY",
+  "MAZDOCK",
+  "ZYDUSLIFE",
+  "CANBK",
+  "SOLARINDS",
+  "POLICYBZR",
+  "SHREECEM",
+  "UNIONBANK",
+  "ICICIPRULI",
+  "ADANIENSOL",
+  "LUPIN",
+  "RVNL",
+  "TATACONSUM",
+  "INDUSTOWER",
+  "CUMMINSIND",
+  "ICICIGI",
+  "JINDALSTEL",
+  "HDFCAMC",
+  "SUZLON",
+  "DABUR",
+  "HEROMOTOCO",
+  "IDBI",
+  "PERSISTENT",
+  "GMRINFRA",
+  "BHEL",
+  "GODREJPROP",
+  "NHPC",
+  "HINDPETRO",
+  "MARICO",
+  "INDIANB",
+  "ATGL",
+  "TORNTPOWER",
+  "COLPAL",
+  "MUTHOOTFIN",
+  "OBEROIRLTY",
+  "OIL",
+  "INDUSINDBK",
+  "KALYANKJIL",
+  "PRESTIGE",
+  "BSE",
+  "GICRE",
+  "AUROPHARMA",
+  "TIINDIA",
+  "BHARTIHEXA",
+  "NMDC",
+  "SBICARD",
+  "ASHOKLEY",
+  "SRF",
+  "PATANJALI",
+  "ALKEM",
+  "YESBANK",
+  "JSWINFRA",
+  "FACT",
+  "IRCTC",
+  "PHOENIXLTD",
+  "BHARATFORG",
+  "PIIND",
+  "UNOMINDA",
+  "PAYTM",
+  "ABBOTINDIA",
+  "JSL",
+  "SUPREMEIND",
+  "IREDA",
+  "UCOBANK",
+  "COFORGE",
+  "LINDEINDIA",
+  "MOTILALOFS",
+  "MPHASIS",
+  "IDEA",
+  "SCHAEFFLER",
+  "LTTS",
+  "BERGEPAINT",
+  "MRF",
+  "VOLTAS",
+  "LLOYDSME",
+  "BALKRISIND",
+  "FORTIS",
+  "BANKINDIA",
+  "THERMAX",
+  "FEDERALBNK",
+  "UBL",
+  "COROMANDEL",
+  "CENTRALBK",
+  "ABCAPITAL",
+  "CONCOR",
+  "PGHH",
+  "PAGEIND",
+  "SAIL",
+  "TATACOMM",
+  "POWERINDIA",
+  "PETRONET",
+  "HUDCO",
+  "ASTRAL",
+  "GET&D",
+  "IDFCFIRSTB",
+  "FLUOROCHEM",
+  "NYKAA",
+  "SJVN",
+  "SUNDARMFIN",
+  "TATAELXSI",
+  "JUBLFOOD",
+  "NATIONALUM",
+  "BIOCON",
+  "BDL",
+  "COCHINSHIP",
+  "MAHABANK",
+  "APLAPOLLO",
+  "AUBANK",
+  "360ONE",
+  "GLENMARK",
+  "BLUESTARCO",
+  "ACC",
+  "OLAELEC",
+  "SONACOMS",
+  "UPL",
+  "KEI",
+  "AWL",
+  "GLAXO",
+  "APARINDS",
+  "KPITTECH",
+  "MFSL",
+  "KAYNES",
+  "EXIDEIND",
+  "CRISIL",
+  "IPCALAB",
+  "CDSL",
+  "TATATECH",
+  "ESCORTS",
+  "NLCINDIA",
+  "SYNGENE",
+  "DEEPAKNTR",
+  "LTF",
+  "PSB",
+  "HONAUT",
+  "GODREJIND",
+  "DALBHARAT",
+  "AJANTPHARM",
+  "JKCEMENT",
+  "EMBASSY",
+  "PPLPHARMA",
+  "MCX",
+  "3MINDIA",
+  "LICHSGFIN",
+  "TATAINVEST",
+  "GUJGASLTD",
+  "IRB",
+  "M&MFIN",
+  "APOLLOTYRE",
+  "NIACL",
+  "KPRMILL",
+  "METROBRAND",
+  "SUVENPHAR",
+  "ENDURANCE",
+  "MANYAVAR",
+  "ABFRL",
+  "GILLETTE",
+  "KEC",
+  "AIAENG",
+  "BRIGADE",
+  "GODIGIT",
+  "ABREL",
+  "LAURUSLABS",
+  "MEDANTA",
+  "RADICO",
+  "ITI",
+  "JYOTICNC",
+  "SUNTV",
+  "GLAND",
+  "ANGELONE",
+  "GODFRYPHLP",
+  "ISEC",
+  "STARHEALTH",
+  "AEGISLOG",
+  "POLYMED",
+  "TATACHEM",
+  "BANDHANBNK",
+  "CHOLAHLDNG",
+  "HSCL",
+  "AIIL",
+  "PEL",
+  "MSUMI",
+  "HINDCOPPER",
+  "SUMICHEM",
+  "NBCC",
+  "JBCHEPHARM",
+  "EMAMILTD",
+  "POONAWALLA",
+  "NH",
+  "BAYERCROP",
+  "MRPL",
+  "IGL",
+  "INOXWIND",
+  "CARBORUNIV",
+  "CESC",
+  "DELHIVERY",
+  "CROMPTON",
+  "EMCURE",
+  "NATCOPHARM",
+  "FSL",
+  "EIHOTEL",
+  "LALPATHLAB",
+  "TIMKEN",
+  "AFFLE",
+  "SKFINDIA",
+  "CAMS",
+  "ANANTRAJ",
+  "KIMS",
+  "NUVAMA",
+  "PNBHOUSING",
+  "ABSLAMC",
+  "ASTERDM",
+  "ARE&M",
+  "BASF",
+  "HATSUN",
+  "WHIRLPOOL",
+  "TRITURBINE",
+  "GRINDWELL",
+  "PFIZER",
+  "RAMCOCEM",
+  "TEJASNET",
+  "SHYAMMETL",
+  "SUNDRMFAST",
+  "TVSHLTD",
+  "ZFCVINDIA",
+  "RATNAMANI",
+  "WOCKPHARMA",
+  "CONCORDBIO",
+  "KIOCL",
+  "SWANENERGY",
+  "NEULANDLAB",
+  "KANSAINER",
+  "CYIENT",
+  "KFINTECH",
+  "MINDSPACE",
+  "CHAMBLFERT",
+  "CASTROLIND",
+  "ATUL",
+  "NXST",
+  "APLLTD",
+  "PGEL",
+  "GSPL",
+  "JWL",
+  "WELCORP",
+  "KPIL",
+  "IRCON",
+  "ELGIEQUIP",
+  "BIKAJI",
+  "GRSE",
+  "DEVYANI",
+  "JINDALSAW",
+  "FINCABLES",
+  "SCHNEIDER",
+  "ERIS",
+  "AMBER",
+  "NCC",
+  "CHALET",
+  "KARURVYSYA",
+  "VINATIORGA",
+  "JUBLPHARMA",
+  "JBMA",
+  "FIVESTAR",
+  "SIGNATURE",
+  "VGUARD",
+  "NEWGEN",
+  "KAJARIACER",
+  "HFCL",
+  "SONATSOFTW",
+  "JAIBALAJI",
+  "AADHARHFC",
+  "CIEINDIA",
+  "IIFL",
+  "BATAINDIA",
+  "CELLO",
+  "KIRLOSBROS",
+  "BLUEDART",
+  "ANANDRATHI",
+  "ASAHIINDIA",
+  "BEML",
+  "CAPLIPOINT",
+  "DEEPAKFERT",
+  "RPOWER",
+  "NAVINFLUOR",
+  "LMW",
+  "SOHBA",
+  "BLS",
+  "DOMS",
+  "PCBL",
+  "HBLPOWER",
+  "IFCI",
+  "ZENSARTECH",
+  "RKFORGE",
+  "DCMSHRIRAM",
+  "PTCIL",
+  "IDFC",
+  "TRIDENT",
+  "ECLERX",
+  "CGCL",
+  "ZENTEC",
+  "FINPIPE",
+  "ACE",
+  "CENTURYPLY",
+  "UTIAMC",
+  "SARDAEN",
+  "RRKABEL",
+  "BSOFT",
+  "AKZOINDIA",
+  "RELAXO",
+  "RAINBOW",
+  "ASTRAZEN",
+];
+
+const preOpenMarketData = async (query) => {
+  try {
+    let n = 2;
+    if (query.times) {
+      n = query.times;
+    }
+    let stocks = [...allSymbols];
+    if (query.type === "hundred") {
+      stocks = [...nifty100Symbols];
+    }
+    const getMARKET_DATA_PRE_OPEN = async () => {
+      let url = `https://www.nseindia.com/api/market-data-pre-open?key=ALL`;
+      const data = await nseIndia.getData(url);
+      let butMoreStocks = [];
+      let buyMoreNTimes = [];
+      let sellMoreStocks = [];
+      let sellMoreNTimes = [];
+      data.data.forEach((item) => {
+        if (!stocks.includes(item?.metadata?.symbol)) {
+          return;
+        }
+        if (
+          !item.detail?.preOpenMarket?.totalSellQuantity ||
+          !item.detail?.preOpenMarket?.totalBuyQuantity
+        ) {
+          return;
+        }
+
+        if (
+          item.detail?.preOpenMarket?.totalSellQuantity >
+          n * item.detail?.preOpenMarket?.totalBuyQuantity
+        ) {
+          if (item.detail?.preOpenMarket?.Change > 0) {
+            sellMoreNTimes.push({
+              name: item?.metadata?.symbol,
+              totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+              totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+              finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+              atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+              atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+              change: item.detail?.preOpenMarket?.Change,
+              perChange: item.detail?.preOpenMarket?.perChange,
+            });
+          }
+        }
+
+        if (
+          item.detail?.preOpenMarket?.totalBuyQuantity >
+          n * item.detail?.preOpenMarket?.totalSellQuantity
+        ) {
+          if (item.detail?.preOpenMarket?.Change < 0) {
+            buyMoreNTimes.push({
+              name: item?.metadata?.symbol,
+              totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+              totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+              finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+              atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+              atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+              change: item.detail?.preOpenMarket?.Change,
+              perChange: item.detail?.preOpenMarket?.perChange,
+            });
+          }
+        }
+      });
+      return { sellMoreNTimes, buyMoreNTimes };
+    };
+    const a = await getMARKET_DATA_PRE_OPEN();
+    return a;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
   }
 };
 
@@ -1691,4 +2181,5 @@ module.exports = {
   getStockIntradayValues,
   getLast3Intervals,
   getLast3IntervalsOfMultiple,
+  preOpenMarketData,
 };

@@ -128,6 +128,16 @@ const getLast3IntervalsOfMultiple = tryCatch(async (req, res, next) => {
     result,
   });
 });
+const preOpenMarketData = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.preOpenMarketData(req.query);
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
 
 module.exports = {
   fileUpload,
@@ -141,4 +151,5 @@ module.exports = {
   getStockIntradayValues,
   getLast3Intervals,
   getLast3IntervalsOfMultiple,
+  preOpenMarketData,
 };
