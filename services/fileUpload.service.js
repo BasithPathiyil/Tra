@@ -2182,4 +2182,5 @@ module.exports = {
   getLast3Intervals,
   getLast3IntervalsOfMultiple,
   preOpenMarketData,
+  getDataBySymbol
 };

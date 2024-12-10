@@ -139,6 +139,20 @@ const preOpenMarketData = tryCatch(async (req, res, next) => {
   });
 });
 
+const getDataBySymbol = tryCatch(async (req, res, next) => {
+  let { symbol, rowsPerPage } = req.query;
+  if (!symbol) {
+    symbol = "TATASTEEL";
+  }
+  let result = await fileUploadService.getDataBySymbol(symbol);
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    result,
+  });
+});
+
 module.exports = {
   fileUpload,
   removeFile,
@@ -152,4 +166,5 @@ module.exports = {
   getLast3Intervals,
   getLast3IntervalsOfMultiple,
   preOpenMarketData,
+  getDataBySymbol,
 };
