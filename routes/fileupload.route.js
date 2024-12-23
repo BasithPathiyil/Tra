@@ -25,5 +25,6 @@ router.get(
 
 router.get("/preopenMarket", fileUploadController.preOpenMarketData);
 router.get("/onestock", fileUploadController.getDataBySymbol);
+router.get("/firstfive", fileUploadController.preOpenMarketFirstFive);
 
 module.exports = router;

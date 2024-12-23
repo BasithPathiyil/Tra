@@ -153,6 +153,22 @@ const getDataBySymbol = tryCatch(async (req, res, next) => {
   });
 });
 
+const preOpenMarketFirstFive = tryCatch(async (req, res, next) => {
+  let { page, rowsPerPage } = req.query;
+  let result = await fileUploadService.preOpenMarketData(req.query);
+
+  let validStocks = await fileUploadService.preOpenPlusFirstFive(
+    result.sellMoreNTimes,
+    req.query
+  );
+  res.status(200).json({
+    status: true,
+    statuscode: 200,
+    message: "all files fetched Successfully",
+    validStocks,
+  });
+});
+
 module.exports = {
   fileUpload,
   removeFile,
@@ -167,4 +183,5 @@ module.exports = {
   getLast3IntervalsOfMultiple,
   preOpenMarketData,
   getDataBySymbol,
+  preOpenMarketFirstFive,
 };

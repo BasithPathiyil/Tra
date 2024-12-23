@@ -2169,6 +2169,41 @@ const preOpenMarketData = async (query) => {
   }
 };
 
+const preOpenPlusFirstFive = async (stocks, query) => {
+  if (!query.time) {
+    query.time = "2024-12-04T09:48:00Z"; // Default time if none is provided
+  }
+  const currentTime = new Date(query.time).getTime();
+  const stockSymbols = stocks.map((item) => item.name);
+  console.log("stockSymbols", stockSymbols);
+  let validStocks = [];
+  const stockPromises = stockSymbols.map(async (stockSymbol) => {
+    try {
+      const stockData = await getStockIntradayValues(stockSymbol); // Fetch stock data
+      const intervals = get5MinuteIntervals(stockData.grapthData, 5);
+      const relevantIntervals = intervals.filter(
+        (interval) => interval?.time < currentTime
+      );
+      if (relevantIntervals.length < 1) {
+        return null; // Not enough data to calculate
+      }
+
+      const first = relevantIntervals[0];
+
+      // Apply the condition
+      const condition = first.opening < first.closing;
+
+      if (condition) {
+        validStocks.push(stockSymbol); // Add stock symbol if condition is met
+      }
+    } catch (error) {
+      console.log(`Error fetching data for ${stockSymbol}:`, error);
+    }
+  });
+  await Promise.all(stockPromises);
+  return validStocks;
+};
+
 module.exports = {
   fileUpload,
   removeFileDoc,
@@ -2182,5 +2217,6 @@ module.exports = {
   getLast3Intervals,
   getLast3IntervalsOfMultiple,
   preOpenMarketData,
-  getDataBySymbol
+  getDataBySymbol,
+  preOpenPlusFirstFive,
 };
