@@ -2153,6 +2153,9 @@ const preOpenMarketData = async (query) => {
               atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
               change: item.detail?.preOpenMarket?.Change,
               perChange: item.detail?.preOpenMarket?.perChange,
+              preopen: item.detail?.preOpenMarket.preopen.find(
+                (item) => item?.iep === true
+              ),
             });
           }
         }
@@ -2171,6 +2174,9 @@ const preOpenMarketData = async (query) => {
               atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
               change: item.detail?.preOpenMarket?.Change,
               perChange: item.detail?.preOpenMarket?.perChange,
+              preopen: item.detail?.preOpenMarket.preopen.find(
+                (item) => item?.iep === true
+              ),
             });
           } else {
             buyMoreNTimesChangeUp.push({
@@ -2182,6 +2188,9 @@ const preOpenMarketData = async (query) => {
               atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
               change: item.detail?.preOpenMarket?.Change,
               perChange: item.detail?.preOpenMarket?.perChange,
+              preopen: item.detail?.preOpenMarket.preopen.find(
+                (item) => item?.iep === true
+              ),
             });
           }
         }
