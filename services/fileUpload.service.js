@@ -2113,7 +2113,10 @@ const preOpenMarketData = async (query) => {
       let buyMoreNTimesChangeUp = [];
       let sellMoreStocks = [];
       let sellMoreNTimes = [];
+      let sellMoreNFinalMoreNTimes = [];
       let sellMoreNTimesChangeUp = [];
+      let topSellStock;
+      let num = 0;
       data.data.forEach((item) => {
         if (!stocks.includes(item?.metadata?.symbol)) {
           return;
@@ -2123,6 +2126,22 @@ const preOpenMarketData = async (query) => {
           !item.detail?.preOpenMarket?.totalBuyQuantity
         ) {
           return;
+        }
+        if (item.detail?.preOpenMarket?.totalSellQuantity > num) {
+          topSellStock = {
+            name: item?.metadata?.symbol,
+            totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+            totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+            finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+            atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+            atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+            change: item.detail?.preOpenMarket?.Change,
+            perChange: item.detail?.preOpenMarket?.perChange,
+            preopen: item.detail?.preOpenMarket.preopen.find(
+              (item) => item?.iep === true
+            ),
+          };
+          num = item.detail?.preOpenMarket?.totalSellQuantity;
         }
 
         if (
@@ -2143,6 +2162,24 @@ const preOpenMarketData = async (query) => {
                 (item) => item?.iep === true
               ),
             });
+            if (
+              item.detail?.preOpenMarket?.finalQuantity >
+              item.detail?.preOpenMarket?.totalSellQuantity
+            ) {
+              sellMoreNFinalMoreNTimes.push({
+                name: item?.metadata?.symbol,
+                totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+                totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+                finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+                atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+                atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+                change: item.detail?.preOpenMarket?.Change,
+                perChange: item.detail?.preOpenMarket?.perChange,
+                preopen: item.detail?.preOpenMarket.preopen.find(
+                  (item) => item?.iep === true
+                ),
+              });
+            }
           } else {
             sellMoreNTimesChangeUp.push({
               name: item?.metadata?.symbol,
@@ -2196,10 +2233,12 @@ const preOpenMarketData = async (query) => {
         }
       });
       return {
+        topSellStock,
         sellMoreNTimes,
         buyMoreNTimes,
         sellMoreNTimesChangeUp,
         buyMoreNTimesChangeUp,
+        sellMoreNFinalMoreNTimes,
       };
     };
     const a = await getMARKET_DATA_PRE_OPEN();
