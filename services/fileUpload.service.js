@@ -2110,8 +2110,10 @@ const preOpenMarketData = async (query) => {
       const data = await nseIndia.getData(url);
       let butMoreStocks = [];
       let buyMoreNTimes = [];
+      let buyMoreNTimesChangeUp = [];
       let sellMoreStocks = [];
       let sellMoreNTimes = [];
+      let sellMoreNTimesChangeUp = [];
       data.data.forEach((item) => {
         if (!stocks.includes(item?.metadata?.symbol)) {
           return;
@@ -2129,6 +2131,20 @@ const preOpenMarketData = async (query) => {
         ) {
           if (item.detail?.preOpenMarket?.Change > 0) {
             sellMoreNTimes.push({
+              name: item?.metadata?.symbol,
+              totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+              totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+              finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+              atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+              atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+              change: item.detail?.preOpenMarket?.Change,
+              perChange: item.detail?.preOpenMarket?.perChange,
+              preopen: item.detail?.preOpenMarket.preopen.find(
+                (item) => item?.iep === true
+              ),
+            });
+          } else {
+            sellMoreNTimesChangeUp.push({
               name: item?.metadata?.symbol,
               totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
               totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
@@ -2156,10 +2172,26 @@ const preOpenMarketData = async (query) => {
               change: item.detail?.preOpenMarket?.Change,
               perChange: item.detail?.preOpenMarket?.perChange,
             });
+          } else {
+            buyMoreNTimesChangeUp.push({
+              name: item?.metadata?.symbol,
+              totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+              totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+              finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+              atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+              atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+              change: item.detail?.preOpenMarket?.Change,
+              perChange: item.detail?.preOpenMarket?.perChange,
+            });
           }
         }
       });
-      return { sellMoreNTimes, buyMoreNTimes };
+      return {
+        sellMoreNTimes,
+        buyMoreNTimes,
+        sellMoreNTimesChangeUp,
+        buyMoreNTimesChangeUp,
+      };
     };
     const a = await getMARKET_DATA_PRE_OPEN();
     return a;
