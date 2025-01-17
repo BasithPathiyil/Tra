@@ -1532,8 +1532,12 @@ const getStockCustomizeForAto = async (query) => {
 };
 
 const getStockIntradayValues = async (stockSymbol = "TATASTEEL") => {
-  const data = await nseIndia.getEquityIntradayData(stockSymbol);
-  return data;
+  try {
+    const data = await nseIndia.getEquityIntradayData(stockSymbol);
+    return data;
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
 const get5MinuteIntervals = (data, n = 5) => {
@@ -2284,6 +2288,74 @@ const preOpenPlusFirstFive = async (stocks, query) => {
   return validStocks;
 };
 
+const getConsolidationStocks = async (query) => {
+  console.log("Analyzing for consolidation...");
+
+  // Default settings
+  if (!query?.mg) {
+    query.mg = 5; // Default to 5-minute intervals
+  }
+  if (!query.time) {
+    query.time = "2024-12-04T09:48:00Z"; // Default time if none is provided
+  }
+
+  try {
+    const currentTime = new Date(query.time).getTime(); // Parse the query time
+    const stockSymbols = [...nifty50Stocks]; // Array of stock symbols
+    // const stockSymbols = ["TATASTEEL", "HINDUNILVR"];
+    const consolidationStocks = []; // To store stocks meeting the consolidation condition
+
+    // Fetch stock data for all symbols using Promise.all
+    const stockPromises = stockSymbols.map(async (stockSymbol) => {
+      try {
+        const stockData = await getStockIntradayValues(stockSymbol); // Fetch stock data
+        const intervals = get5MinuteIntervals(stockData.grapthData, query?.mg);
+
+        // Filter intervals before the target time
+        const relevantIntervals = intervals.filter(
+          (interval) => interval?.time < currentTime
+        );
+
+        if (relevantIntervals.length < 8) {
+          return null; // Not enough data to analyze for consolidation
+        }
+
+        // Select the last 6–8 intervals
+        const selectedIntervals = relevantIntervals.slice(-5);
+        // Calculate the overall high and low for these intervals
+        const highs = selectedIntervals.map((interval) => interval.high);
+        const lows = selectedIntervals.map((interval) => interval.low);
+        const overallHigh = Math.max(...highs);
+        const overallLow = Math.min(...lows);
+
+        // Determine the consolidation range
+        const averagePrice =
+          selectedIntervals.reduce(
+            (sum, interval) => sum + interval.closing,
+            0
+          ) / selectedIntervals.length;
+        const rangePercentage =
+          ((overallHigh - overallLow) / averagePrice) * 100;
+        // Check if the stock is in consolidation (e.g., range < 1%)
+        if (rangePercentage < 0.15) {
+          consolidationStocks.push(stockSymbol);
+        }
+      } catch (error) {
+        console.log(`Error fetching data for ${stockSymbol}:`, error);
+      }
+    });
+
+    // Wait for all stock data fetches to complete
+    await Promise.all(stockPromises);
+
+    // Return the stocks in consolidation
+    return { consolidationStocks };
+  } catch (error) {
+    console.log(error);
+    return { error: "An error occurred while processing the data." };
+  }
+};
+
 module.exports = {
   fileUpload,
   removeFileDoc,
@@ -2299,4 +2371,5 @@ module.exports = {
   preOpenMarketData,
   getDataBySymbol,
   preOpenPlusFirstFive,
+  getConsolidationStocks,
 };
