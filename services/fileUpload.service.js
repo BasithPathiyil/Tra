@@ -2293,7 +2293,10 @@ const getConsolidationStocks = async (query) => {
 
   // Default settings
   if (!query?.mg) {
-    query.mg = 5; // Default to 5-minute intervals
+    query.mg = 5;
+  }
+  if (!query?.perc) {
+    query.perc = 0.15;
   }
   if (!query.time) {
     query.time = "2024-12-04T09:48:00Z"; // Default time if none is provided
@@ -2337,7 +2340,7 @@ const getConsolidationStocks = async (query) => {
         const rangePercentage =
           ((overallHigh - overallLow) / averagePrice) * 100;
         // Check if the stock is in consolidation (e.g., range < 1%)
-        if (rangePercentage < 0.15) {
+        if (rangePercentage < Number(query.perc)) {
           consolidationStocks.push(stockSymbol);
         }
       } catch (error) {
