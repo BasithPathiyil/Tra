@@ -1,4 +1,5 @@
 const { stockQueryService } = require("../services");
+const { tryCatch } = require("../utils/tryCatch");
 
 const getPreopenMarketDataWithDate = tryCatch(async (req, res, next) => {
   let { page, rowsPerPage } = req.query;
