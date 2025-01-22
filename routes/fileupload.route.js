@@ -1,5 +1,8 @@
 const express = require("express");
-const { fileUploadController } = require("../controllers");
+const {
+  fileUploadController,
+  stockqueryController,
+} = require("../controllers");
 const { auth } = require("../middlewares/auth");
 
 const router = express.Router();
@@ -27,5 +30,11 @@ router.get("/preopenMarket", fileUploadController.preOpenMarketData);
 router.get("/onestock", fileUploadController.getDataBySymbol);
 router.get("/firstfive", fileUploadController.preOpenMarketFirstFive);
 router.get("/consolidation", fileUploadController.getConsolidationStocks);
+
+////////////////////////////////////
+router.get(
+  "/preopenmarket_query",
+  stockqueryController.getPreopenMarketDataWithDate
+);
 
 module.exports = router;
