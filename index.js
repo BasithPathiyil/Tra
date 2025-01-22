@@ -7,7 +7,7 @@ const cors = require("cors");
 const routes = require("./routes");
 const { errorHandler } = require("./middlewares/errorHanlder");
 
-// connectDB();
+connectDB();
 const app = express();
 dotenv.config({ path: ".env" });
 app.use(helmet());

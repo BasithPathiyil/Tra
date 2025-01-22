@@ -266,6 +266,7 @@ const aggregateToIntervals = (data, intervalMinutes) => {
 };
 
 const { NseIndia } = require("stock-nse-india");
+const PreopenMarket = require("../models/preopenmarket.model");
 const nseIndia = new NseIndia();
 
 const aggregateToNMinutes = (data, n = 5) => {
@@ -2121,7 +2122,7 @@ const preOpenMarketData = async (query) => {
       let sellMoreNTimesChangeUp = [];
       let topSellStock;
       let num = 0;
-      data.data.forEach((item) => {
+      data.data.forEach(async (item) => {
         if (!stocks.includes(item?.metadata?.symbol)) {
           return;
         }
@@ -2166,6 +2167,57 @@ const preOpenMarketData = async (query) => {
                 (item) => item?.iep === true
               ),
             });
+            // item.detail?.preOpenMarket?.lastUpdateTime,
+            let date = item.detail?.preOpenMarket?.lastUpdateTime.split(" ")[0];
+            if ((n = 4)) {
+              let isExisting = await PreopenMarket.findOne({
+                date: date,
+                name: item?.metadata?.symbol,
+              });
+              if (isExisting) {
+                await PreopenMarket.updateOne(
+                  {
+                    date: date,
+                    name: item?.metadata?.symbol,
+                  },
+                  {
+                    date: item.detail?.preOpenMarket?.lastUpdateTime.split(
+                      " "
+                    )[0],
+                    times: 4,
+                    name: item?.metadata?.symbol,
+                    totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+                    totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+                    finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+                    atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+                    atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+                    change: item.detail?.preOpenMarket?.Change,
+                    perChange: item.detail?.preOpenMarket?.perChange,
+                    preopen: item.detail?.preOpenMarket.preopen.find(
+                      (item) => item?.iep === true
+                    ),
+                  }
+                );
+              } else {
+                await PreopenMarket.create({
+                  date: item.detail?.preOpenMarket?.lastUpdateTime.split(
+                    " "
+                  )[0],
+                  times: 4,
+                  name: item?.metadata?.symbol,
+                  totalSellQty: item.detail?.preOpenMarket?.totalSellQuantity,
+                  totalBuyQty: item.detail?.preOpenMarket?.totalBuyQuantity,
+                  finalQuantity: item.detail?.preOpenMarket?.finalQuantity,
+                  atoBuyQty: item.detail?.preOpenMarket?.atoBuyQty,
+                  atoSellQty: item.detail?.preOpenMarket?.atoSellQty,
+                  change: item.detail?.preOpenMarket?.Change,
+                  perChange: item.detail?.preOpenMarket?.perChange,
+                  preopen: item.detail?.preOpenMarket.preopen.find(
+                    (item) => item?.iep === true
+                  ),
+                });
+              }
+            }
             if (
               item.detail?.preOpenMarket?.finalQuantity >
               item.detail?.preOpenMarket?.totalSellQuantity
@@ -2259,7 +2311,6 @@ const preOpenPlusFirstFive = async (stocks, query) => {
   }
   const currentTime = new Date(query.time).getTime();
   const stockSymbols = stocks.map((item) => item.name);
-  console.log("stockSymbols", stockSymbols);
   let validStocks = [];
   const stockPromises = stockSymbols.map(async (stockSymbol) => {
     try {
@@ -2278,7 +2329,7 @@ const preOpenPlusFirstFive = async (stocks, query) => {
       const condition = first.opening < first.closing;
 
       if (condition) {
-        validStocks.push(stockSymbol); // Add stock symbol if condition is met
+        validStocks.push(stockSymbol);
       }
     } catch (error) {
       console.log(`Error fetching data for ${stockSymbol}:`, error);
