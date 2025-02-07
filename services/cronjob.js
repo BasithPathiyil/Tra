@@ -24,7 +24,9 @@ const runScheduledTask = async () => {
   };
   try {
     const response = await getConsolidationStocks(query);
-
+    if (response.consolidationStocks.length < 1) {
+      return;
+    }
     sendConsolidationsEmail({ stocks: response.consolidationStocks });
   } catch (error) {
     console.error("Error calling API:", error);
