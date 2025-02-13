@@ -1,6 +1,7 @@
 const cron = require("node-cron");
 const { getConsolidationStocks } = require("./fileUpload.service");
 const { sendConsolidationsEmail } = require("./sendmail.service");
+const { default: axios } = require("axios");
 
 const runScheduledTask = async () => {
   // .slice(0, 16) + "00.000Z";
@@ -39,4 +40,13 @@ const startCronJob = () => {
   console.log("Cron job started.");
 };
 
-module.exports = { startCronJob };
+const start5min = async () => {
+  cron.schedule("*/5 * * * *", runScheduledTask);
+  try {
+    const data = await axios.get("https://tra-c8a9.onrender.com");
+  } catch (error) {
+    console.log("error in calling api");
+  }
+};
+
+module.exports = { startCronJob, start5min };

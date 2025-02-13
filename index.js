@@ -6,7 +6,7 @@ const xss = require("xss-clean");
 const cors = require("cors");
 const routes = require("./routes");
 const { errorHandler } = require("./middlewares/errorHanlder");
-const { startCronJob } = require("./services/cronjob");
+const { startCronJob, start5min } = require("./services/cronjob");
 
 connectDB();
 const app = express();
@@ -20,6 +20,7 @@ app.use(xss());
 
 app.use(cors());
 startCronJob();
+start5min();
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
