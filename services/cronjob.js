@@ -40,13 +40,16 @@ const startCronJob = () => {
   console.log("Cron job started.");
 };
 
-const start5min = async () => {
-  cron.schedule("*/5 * * * *", runScheduledTask);
+const call5minApi = async () => {
   try {
     const data = await axios.get("https://tra-c8a9.onrender.com");
   } catch (error) {
     console.log("error in calling api");
   }
+};
+
+const start5min = async () => {
+  cron.schedule("*/5 * * * *", call5minApi);
 };
 
 module.exports = { startCronJob, start5min };
