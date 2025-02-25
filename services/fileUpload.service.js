@@ -2123,7 +2123,7 @@ const preOpenMarketData = async (query) => {
       let topSellStock;
       let num = 0;
       data.data.forEach(async (item) => {
-        if (!stocks.includes(item?.metadata?.symbol)) {
+        if (query?.type !== "all" && !stocks.includes(item?.metadata?.symbol)) {
           return;
         }
         if (
