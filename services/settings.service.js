@@ -6,10 +6,14 @@ const updateSettings = async (body) => {
   const isTypeExist = await getSettingsType(body.type);
   if (isTypeExist) {
     isTypeExist.value = body.value;
-    await isTypeExist.save();
-    return true;
+    // await isTypeExist.save();
+    return await settings.updateOne({ type: body.type }, body);
   }
-  return settings.create(body);
+  return await settings.create(body);
+};
+
+const getSettings = async (body) => {
+  return await settings.find();
 };
 //
 const getSettingsType = async (type) => {
@@ -32,4 +36,5 @@ const login = async (username, password) => {
 
 module.exports = {
   updateSettings,
+  getSettings,
 };
