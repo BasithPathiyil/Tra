@@ -2346,13 +2346,16 @@ const getConsolidationStocks = async (query) => {
   if (!query?.mg) {
     query.mg = 5;
   }
+  if (!query?.intervels) {
+    query.intervels = 5;
+  }
   if (!query?.perc) {
     query.perc = 0.15;
   }
   if (!query.time) {
     query.time = "2024-12-04T09:48:00Z"; // Default time if none is provided
   }
-
+  let intervalNos = Number(query.intervels);
   try {
     const currentTime = new Date(query.time).getTime(); // Parse the query time
     const stockSymbols = [...nifty50Stocks]; // Array of stock symbols
@@ -2375,7 +2378,7 @@ const getConsolidationStocks = async (query) => {
         }
 
         // Select the last 6–8 intervals
-        const selectedIntervals = relevantIntervals.slice(-5);
+        const selectedIntervals = relevantIntervals.slice(-intervalNos);
         // Calculate the overall high and low for these intervals
         const highs = selectedIntervals.map((interval) => interval.high);
         const lows = selectedIntervals.map((interval) => interval.low);

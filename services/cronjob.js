@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const { getConsolidationStocks } = require("./fileUpload.service");
 const { sendConsolidationsEmail } = require("./sendmail.service");
 const { default: axios } = require("axios");
+const settings = require("../models/settings.model");
 
 const runScheduledTask = async () => {
   // .slice(0, 16) + "00.000Z";
@@ -17,11 +18,14 @@ const runScheduledTask = async () => {
   }
 
   const formattedDate = new Date(new Date().getTime() + 5.5 * 3600 * 1000);
+  let intervalObj = await settings.findOne({ type: "INTERVEL_CONSOLIDATION" });
+  let percentageObj = await settings.findOne({ type: "PERC_CONSOLIDATION" });
 
   let query = {
     mg: 5,
-    perc: 0.15,
+    perc: Number(percentageObj.value) || 0.15,
     time: formattedDate,
+    intervels: Number(intervalObj.value) || 5,
   };
   try {
     const response = await getConsolidationStocks(query);
