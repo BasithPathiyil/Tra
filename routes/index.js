@@ -8,6 +8,6 @@ const router = express.Router();
 router.use("/user", userRoute);
 router.use("/file_upload", fileUploadRoute);
 router.use("/nse", nseRoute);
-router.use("/settings", settingsRoute);
+router.use("/file_upload/settings", settingsRoute);
 
 module.exports = router;
