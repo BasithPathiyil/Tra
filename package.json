@@ -25,7 +25,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.0.3",
-    "stock-nse-india": "^1.2.0",
+    "stock-nse-india": "^1.2.1",
     "xss-clean": "^0.1.4",
     "yahoo-finance2": "^2.13.2"
   }
