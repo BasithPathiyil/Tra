@@ -3,3 +3,4 @@ module.exports.fileUploadController = require("./fileUpload.controller");
 module.exports.stockqueryController = require("./stockquery.controller");
 module.exports.nseContoller = require("./nse.controller");
 module.exports.settingsContoller = require("./settings.controller");
+module.exports.commonContoller = require("./common.controller");
